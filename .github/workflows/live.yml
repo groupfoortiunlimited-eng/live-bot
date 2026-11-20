@@ -1,0 +1,14 @@
+name: Live
+on:
+  workflow_dispatch:
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Install
+        run: sudo apt update && sudo apt install -y ffmpeg wget
+      - name: Download
+        run: wget -O Video.mp4 "https://drive.google.com/uc?export=download&id=1SYzignXOHd-06T_d_JerIIJ0gMLIVMVP"
+      - name: Go Live
+        run: ffmpeg -re -stream_loop -1 -i Video.mp4 -vf "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2,setsar=1" -r 20 -c:v libx264 -preset veryfast -maxrate 1500k -bufsize 3000k -pix_fmt yuv420p -g 40 -c:a aac -b:a 128k -ar 44100 -f flv rtmp://a.rtmp.youtube.com/live2/${{ secrets.STREAM_KEY }}
