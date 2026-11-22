@@ -11,4 +11,4 @@ jobs:
       - name: Download
         run: wget -O Video.mp4 "https://drive.google.com/uc?export=download&id=1dIyUhZ3E0hOxw_huup46_kAbiiBPwUbi"
       - name: Go Live
-        run: ffmpeg -re -stream_loop -1 -i Video.mp4 -vf "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2,setsar=1" -r 20 -c:v libx264 -preset veryfast -maxrate 1500k -bufsize 3000k -pix_fmt yuv420p -g 40 -c:a aac -b:a 128k -ar 44100 -f flv rtmp://a.rtmp.youtube.com/live2/${{ secrets.STREAM_KEY }}
+        run: ffmpeg -re -stream_loop -1 -i Video.mp4 -vf "scale=720:1280:force_original_aspect_ratio=decrease,pad=720:1280:(ow-iw)/2:(oh-ih)/2,setsar=1" -r 20 -c:v libx264 -preset veryfast -maxrate 1500k -bufsize 3000k -pix_fmt yuv420p -g 40 -c:a aac -b:a 128k -ar 44100 -f tee "[f=flv]rtmp://a.rtmp.youtube.com/live2/${{ secrets.STREAM_KEY }}|[f=flv]rtmps://live-api-s.facebook.com:443/rtmp/${{ secrets.FB_STREAM_KEY }}"
