@@ -19,4 +19,4 @@ jobs:
           ffprobe video.mp4
 
       - name: Go Live
-        run: ffmpeg -re -stream_loop -1 -i video.mp4 -map 0:v:0 -map 0:a:0 -vf "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1" -r 30 -c:v libx264 -preset veryfast -maxrate 2500k -bufsize 5000k -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -t 21000 -f flv rtmp://a.rtmp.youtube.com/live2/${{ secrets.STREAM_KEY }}
+        run: ffmpeg -re -stream_loop -1 -i video.mp4 -map 0:v:0 -map 0:a:0 -vf "scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,setsar=1" -r 30 -c:v libx264 -preset veryfast -maxrate 2500k -bufsize 5000k -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -t 21000 -f flv rtmp://a.rtmp.youtube.com/live2/${{ secrets.STREAM_KEY }}
