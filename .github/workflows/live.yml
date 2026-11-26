@@ -1,5 +1,4 @@
-name: Live
-
+name: Live on
 on:
   workflow_dispatch:
 
@@ -12,16 +11,12 @@ jobs:
         run: sudo apt update && sudo apt install -y ffmpeg python3-pip && pip3 install -U gdown
 
       - name: Download Video
-        run: gdown "1dj_I8Ag96K5WpOEC8lEQDy3WqCkaiSuL" -O video.mp4
-
-      - name: Download Audio
-        run: gdown "1pX4_D7vZk6kVwYrsVQv20hKT2CXOwCRi" -O audio.mp3
+        run: gdown "1KD3WVphOgYR0P6YAfvPXD73Gei5M5W1c" -O video.mp4
 
       - name: Check Files
         run: |
           ls -lh
           ffprobe video.mp4
-          ffprobe audio.mp3
 
       - name: Go Live
-        run: ffmpeg -re -stream_loop -1 -i video.mp4 -stream_loop -1 -i audio.mp3 -map 1:v:0 -map 0:a:0 -vf "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1" -r 30 -c:v libx264 -preset veryfast -maxrate 2500k -bufsize 5000k -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -t 21000 -f flv rtmp://a.rtmp.youtube.com/live2/${{ secrets.STREAM_KEY }}
+        run: ffmpeg -re -stream_loop -1 -i video.mp4 -map 0:v:0 -map 0:a:0 -vf "scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,setsar=1" -r 30 -c:v libx264 -preset veryfast -maxrate 2500k -bufsize 5000k -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -t 21000 -f flv rtmp://a.rtmp.youtube.com/live2/${{ secrets.STREAM_KEY }}
